@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ندى | مصورة أعراس ومناسبات محترفة</title>
+    <!-- Google Fonts: Cairo & FontAwesome for Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Particle Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-dot"></div>
+
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="container header-container">
+            <!-- الشعار في اليسار (Logo on Left) -->
+            <a href="#" class="logo">
+                <span class="logo-text"><span class="logo-n">N</span>ADA</span>
+                <span class="logo-sub">PHOTOGRAPHY</span>
+            </a>
+
+            <!-- القائمة في اليمين (Menu on Right) -->
+            <nav class="nav-menu">
+                <a href="#home" class="nav-link active">الرئيسية</a>
+                <a href="#about" class="nav-link">من أنا</a>
+                <a href="#services" class="nav-link">خدماتي</a>
+                <a href="#gallery" class="nav-link">أعمالي</a>
+                <a href="#contact" class="nav-link">تواصل معي</a>
+            </nav>
+
+            <!-- Hamburger Button for Mobile -->
+            <button class="hamburger-btn" aria-label="Open Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <a href="#home" class="mobile-link">الرئيسية</a>
+        <a href="#about" class="mobile-link">من أنا</a>
+        <a href="#services" class="mobile-link">خدماتي</a>
+        <a href="#gallery" class="mobile-link">أعمالي</a>
+        <a href="#contact" class="mobile-link">تواصل معي</a>
+    </div>
+
+    <!-- Home (Hero) Section -->
+    <section id="home" class="hero-section">
+        <div class="container hero-container">
+            <!-- الصورة الشخصية في اليمين مع هالة توهج دائرية حمراء (Image on Right) -->
+            <div class="hero-image-container">
+                <div class="glow-ring"></div>
+                <div class="hero-image-wrapper">
+                    <img src="assets/avatar.png" alt="المصورة ندى" class="hero-img">
+                </div>
+            </div>
+
+            <!-- تفاصيل النصوص في اليسار (Text on Left) -->
+            <div class="hero-content">
+                <span class="hero-subtitle">مرحباً بك في عالمي الإبداعي</span>
+                <h1 class="hero-title">أنا ندى، مصورة محترفة</h1>
+                <h2 class="hero-typing-container">
+                    متخصصة في <span class="typing-text"></span>
+                </h2>
+                <p class="hero-description">
+                    أوثق أجمل تفاصيل الأعراس والمناسبات السعيدة بأعلى درجات الفخامة والاحترافية. كل صورة ألتقطها تحكي قصة وتخلد لحظة فريدة.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://wa.me/966551978419?text=مرحباً%20المصورة%20ندى،%20أود%20الاستفسار%20عن%20تفاصيل%20حجز%20جلسة%20تصوير" target="_blank" class="btn btn-primary">
+                        <i class="fab fa-whatsapp"></i> احجز جلسة الآن
+                    </a>
+                    <a href="#gallery" class="btn btn-outline">مشاهدة أعمالي</a>
+                </div>
+                <div class="social-icons">
+                    <a href="https://wa.me/966551978419" target="_blank" class="social-icon" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    <a href="#" class="social-icon" aria-label="Behance"><i class="fab fa-behance"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="about-section">
+        <div class="container about-container">
+            <div class="about-image-container">
+                <div class="about-glow"></div>
+                <div class="about-image-wrapper">
+                    <!-- لقطة فنية متوهجة لتفاصيل الورود والزفاف -->
+                    <img src="assets/wedding2.png" alt="تفاصيل الأعراس المصورة ندى" class="about-img">
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-subtitle">قصتي وشغفي</span>
+                <h2 class="section-title">من وراء العدسة؟</h2>
+                <p class="about-text">
+                    بدأت رحلتي في عالم التصوير كشغف لالتقاط الضوء وتخليد المشاعر. مع مرور السنوات، تحول هذا الشغف إلى احتراف أسعى من خلاله لتقديم منظور مختلف لكل لقطة وتوثيق الذكريات السعيدة لتبقى حية للأبد.
+                </p>
+                <p class="about-text">
+                    أؤمن بأن تصوير الأعراس ليس مجرد توثيق لحدث، بل هو حفظ للمشاعر العفوية والدموع والابتسامات التي لا تتكرر. كما أحرص على التقاط تفاصيل المناسبات السعيدة بكل عفوية وإبراز جمال اللحظة وجاذبيتها لتبقى ذكرى حية مدى الحياة.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <h3>+5</h3>
+                        <p>سنوات خبرة</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>+150</h3>
+                        <p>مناسبة وحفل زفاف</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>100%</h3>
+                        <p>رضا العملاء</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">ماذا أقدم لكم؟</span>
+                <h2 class="section-title">خدماتي الاحترافية</h2>
+            </div>
+            
+            <div class="services-grid">
+                <!-- Card 1: Wedding -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h3 class="service-title">تصوير حفلات الزفاف</h3>
+                    <p class="service-description">
+                        تغطية شاملة ليوم زفافك بأحدث التقنيات. نهتم بأدق التفاصيل من فستان الزفاف والمجوهرات إلى المشاعر العفوية وتوثيق لحظات الفرحة والرقصات.
+                    </p>
+                    <ul class="service-features">
+                        <li><i class="fa-solid fa-check"></i> تصوير فوتوغرافي احترافي</li>
+                        <li><i class="fa-solid fa-check"></i> تعديل ومعالجة ألوان سينمائية</li>
+                        <li><i class="fa-solid fa-check"></i> ألبوم زفاف فاخر ومطبوع</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: Engagements -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-ring"></i>
+                    </div>
+                    <h3 class="service-title">تصوير الخطوبة وعقد القران</h3>
+                    <p class="service-description">
+                        نخلد لحظات الارتباط والوعود الأولى. نهتم بجلسات التصوير الثنائية (Couple portrait) وتوثيق كتابة العقد وتفاصيل الخواتم واللحظات العائلية الخاصة.
+                    </p>
+                    <ul class="service-features">
+                        <li><i class="fa-solid fa-check"></i> جلسات تصوير ثنائية مميزة</li>
+                        <li><i class="fa-solid fa-check"></i> توثيق لحظات عقد القران والشبكة</li>
+                        <li><i class="fa-solid fa-check"></i> صور عالية الدقة ومعالجة بالكامل</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: Events -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="service-title">تصوير الفعاليات والحفلات الخاصة</h3>
+                    <p class="service-description">
+                        تغطية إبداعية للحفلات الخاصة والأعياد وحفلات التخرج والمناسبات العائلية. نلتقط روح المناسبة ونوثق تفاصيلها البهيجة بجودة متميزة.
+                    </p>
+                    <ul class="service-features">
+                        <li><i class="fa-solid fa-check"></i> تغطية سريعة وشاملة للمناسبة</li>
+                        <li><i class="fa-solid fa-check"></i> التقاط اللحظات التفاعلية والعفوية</li>
+                        <li><i class="fa-solid fa-check"></i> تسليم سريع للصور الرقمية</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects / Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">معرض الأعمال</span>
+                <h2 class="section-title">شاهد أعمالي الإبداعية</h2>
+            </div>
+
+            <!-- Gallery Filter Buttons -->
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="wedding">تصوير الأعراس والخطوبة</button>
+                <button class="filter-btn" data-filter="event">المناسبات والفعاليات</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid">
+                <!-- Item 1: Wedding -->
+                <div class="gallery-item" data-category="wedding">
+                    <img src="assets/wedding1.png" alt="تفاصيل خاتم الزفاف والأعراس">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">أعراس</span>
+                            <h4 class="gallery-title">خاتم العمر والتفاصيل الدافئة</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2: Event -->
+                <div class="gallery-item" data-category="event">
+                    <img src="assets/event1.png" alt="حفل خارجي بهيج بالشموع والأضواء">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">مناسبات</span>
+                            <h4 class="gallery-title">حفل خارجي بهيج بالشموع والأضواء</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3: Wedding -->
+                <div class="gallery-item" data-category="wedding">
+                    <img src="assets/wedding2.png" alt="باقة الورد وتفاصيل الفستان">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">أعراس</span>
+                            <h4 class="gallery-title">باقة ورود العروس وفستان الزفاف الأبيض</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4: Wedding Details (Watch) -->
+                <div class="gallery-item" data-category="wedding">
+                    <img src="assets/product2.png" alt="تفاصيل إكسسوارات العريس وساعة اليد">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">أعراس (تفاصيل)</span>
+                            <h4 class="gallery-title">إكسسوارات العريس وتوثيق التفاصيل الأنيقة</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5: Wedding Details (Perfume) -->
+                <div class="gallery-item" data-category="wedding">
+                    <img src="assets/product1.png" alt="تفاصيل عطر العروس">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">أعراس (تفاصيل)</span>
+                            <h4 class="gallery-title">تفاصيل عطر العروس واللمسات الخاصة ليوم العمر</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6: Event (Sparklers) -->
+                <div class="gallery-item" data-category="event">
+                    <img src="assets/event1.png" alt="توثيق لحظات الاحتفال بالشرارات والبهجة">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <span class="gallery-cat">مناسبات</span>
+                            <h4 class="gallery-title">لحظات الاحتفال بالشرارات المتوهجة والبهجة</h4>
+                        </div>
+                        <div class="gallery-icon">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Me & Booking Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="text-center">
+                <span class="section-subtitle">تواصل معي</span>
+                <h2 class="section-title">احجز جلستك الآن</h2>
+            </div>
+
+            <div class="contact-grid">
+                <!-- Form Area -->
+                <form id="contactForm" class="contact-form">
+                    <h3 class="form-title">أرسل لي استفسارك</h3>
+                    
+                    <div class="form-group">
+                        <input type="text" id="fullName" placeholder="الاسم الكامل" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="tel" id="phoneNumber" placeholder="رقم الهاتف" required>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="bookingService" required>
+                            <option value="" disabled selected>اختر الخدمة المطلوبة</option>
+                            <option value="wedding">تصوير زفاف كامل</option>
+                            <option value="engagement">تصوير خطوبة وعقد قران</option>
+                            <option value="events">تغطية حفلات ومناسبات خاصة</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea id="message" rows="5" placeholder="أخبرني بمزيد من التفاصيل عن الجلسة والتواريخ المقترحة..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fab fa-whatsapp"></i> إرسال وحجز عبر واتساب
+                    </button>
+                </form>
+
+                <!-- Contact Details Card -->
+                <div class="contact-info-card">
+                    <h3 class="card-title">معلومات الاتصال</h3>
+                    <p class="card-description">
+                        يسعدني دائماً الرد على جميع استفساراتكم. يمكنك التواصل معي مباشرة عبر الهاتف أو الواتساب، أو متابعة أعمالي على منصات التواصل الاجتماعي.
+                    </p>
+
+                    <div class="info-items">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div class="info-text">
+                                <span>اتصال مباشر</span>
+                                <a href="tel:0551978419">0551978419</a>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="info-text">
+                                <span>واتساب (الحجز والاستفسار)</span>
+                                <a href="https://wa.me/966551978419" target="_blank">0551978419</a>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="info-text">
+                                <span>الموقع</span>
+                                <p>المملكة العربية السعودية/بيشة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="booking-cta">
+                        <h4>حجز سريع ومباشر</h4>
+                        <p>اضغط على الزر أدناه للانتقال للواتساب للتحدث معي مباشرة وحجز موعدك:</p>
+                        <a href="https://wa.me/966551978419?text=مرحباً%20المصورة%20ندى،%20أود%20حجز%20جلسة%20تصوير" target="_blank" class="btn btn-whatsapp-direct">
+                            <i class="fab fa-whatsapp"></i> تواصل عبر واتساب مباشر
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <p class="copyright">
+                &copy; 2026 جهاد الطيار. جميع الحقوق محفوظة. تم التطوير بكل شغف.
+            </p>
+            <div class="footer-links">
+                <a href="#home">الرئيسية</a>
+                <a href="#about">من أنا</a>
+                <a href="#services">خدماتي</a>
+                <a href="#gallery">أعمالي</a>
+                <a href="#contact">تواصل معي</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <button class="lightbox-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="lightbox-content-wrapper">
+            <img class="lightbox-img" id="lightbox-img" src="" alt="عرض بكامل الشاشة">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+        <button class="lightbox-next" aria-label="Next image"><i class="fa-solid fa-chevron-left"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
