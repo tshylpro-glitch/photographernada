@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Event delegation for hover states on all interactive elements
         document.addEventListener('mouseenter', (e) => {
             const target = e.target;
+            if (!(target instanceof Element)) return; // Guard: skip Text nodes
             if (target.tagName === 'A' || 
                 target.tagName === 'BUTTON' || 
                 target.closest('.gallery-item') || 
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('mouseleave', (e) => {
             const target = e.target;
+            if (!(target instanceof Element)) return; // Guard: skip Text nodes
             if (target.tagName === 'A' || 
                 target.tagName === 'BUTTON' || 
                 target.closest('.gallery-item') || 
@@ -401,5 +403,49 @@ ${message}
             
             contactForm.reset();
         });
+    }
+
+    // --- 10. Countdown Timer for Discount Offer (resets every 7 days) ---
+    const timerHours   = document.getElementById('timer-hours');
+    const timerMinutes = document.getElementById('timer-minutes');
+    const timerSeconds = document.getElementById('timer-seconds');
+
+    if (timerHours && timerMinutes && timerSeconds) {
+        const STORAGE_KEY  = 'nada_discount_deadline';
+        const DURATION_MS  = 7 * 24 * 60 * 60 * 1000; // 7 days
+        let deadline = parseInt(localStorage.getItem(STORAGE_KEY));
+
+        // Create a fresh deadline if missing or already expired
+        if (!deadline || Date.now() > deadline) {
+            deadline = Date.now() + DURATION_MS;
+            localStorage.setItem(STORAGE_KEY, deadline);
+        }
+
+        function pad(n) {
+            return String(Math.max(0, n)).padStart(2, '0');
+        }
+
+        function updateTimer() {
+            let remaining = deadline - Date.now();
+
+            if (remaining <= 0) {
+                // Renew for another 7 days
+                deadline = Date.now() + DURATION_MS;
+                localStorage.setItem(STORAGE_KEY, deadline);
+                remaining = DURATION_MS;
+            }
+
+            const totalSeconds = Math.floor(remaining / 1000);
+            const hours   = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            timerHours.textContent   = pad(hours);
+            timerMinutes.textContent = pad(minutes);
+            timerSeconds.textContent = pad(seconds);
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
     }
 });
