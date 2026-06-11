@@ -448,4 +448,346 @@ ${message}
         updateTimer();
         setInterval(updateTimer, 1000);
     }
+
+    // --- 11. Testimonials & Reviews System (localStorage) ---
+    const starPickerStars = document.querySelector('.star-picker-stars');
+    const stars = document.querySelectorAll('.star-pick');
+    const starHint = document.querySelector('.star-picker-hint');
+    const reviewForm = document.getElementById('reviewForm');
+    const userReviewsContainer = document.getElementById('user-reviews-container');
+    const reviewSuccess = document.getElementById('review-success');
+    
+    let selectedRating = 0;
+
+    // List of premium gradient backgrounds for user review avatars
+    const avatarGradients = [
+        'linear-gradient(135deg, #ff003c, #ff6b8a)',
+        'linear-gradient(135deg, #10b981, #059669)',
+        'linear-gradient(135deg, #3b82f6, #2563eb)',
+        'linear-gradient(135deg, #f59e0b, #d97706)',
+        'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+        'linear-gradient(135deg, #ec4899, #db2777)',
+        'linear-gradient(135deg, #06b6d4, #0891b2)'
+    ];
+
+    // Helper to get a stable gradient index based on string hash (safeguarded against undefined name)
+    function getAvatarGradient(name) {
+        const safeName = name || 'زائر';
+        let hash = 0;
+        for (let i = 0; i < safeName.length; i++) {
+            hash = safeName.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const index = Math.abs(hash) % avatarGradients.length;
+        return avatarGradients[index];
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Safeguarded localStorage fetch to handle corrupted data
+    function getSavedReviews() {
+        try {
+            const reviews = localStorage.getItem('nada_user_reviews');
+            const parsed = reviews ? JSON.parse(reviews) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            console.error('Error parsing reviews from localStorage:', e);
+            return [];
+        }
+    }
+
+    // Render client reviews safely
+    function renderUserReviews() {
+        if (!userReviewsContainer) return;
+        
+        const savedReviews = getSavedReviews();
+        
+        if (savedReviews.length === 0) {
+            userReviewsContainer.innerHTML = '';
+            userReviewsContainer.style.display = 'none';
+            return;
+        }
+        
+        userReviewsContainer.style.display = 'grid';
+        userReviewsContainer.innerHTML = savedReviews.map(review => {
+            if (!review) return '';
+            
+            const name = review.name || 'عميل كريم';
+            const date = review.date || new Date().toLocaleDateString('ar-SA');
+            const rating = typeof review.rating === 'number' ? review.rating : 5;
+            const text = review.text || '';
+            const service = review.service || 'تغطية مناسبة 📸';
+            const avatarLetter = review.avatarLetter || name.charAt(0) || 'ع';
+
+            // Generate stars HTML
+            let starsHtml = '';
+            const fullStars = Math.floor(rating);
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    starsHtml += '<i class="fa-solid fa-star"></i>';
+                } else {
+                    starsHtml += '<i class="fa-regular fa-star" style="opacity: 0.3;"></i>';
+                }
+            }
+            
+            const gradient = getAvatarGradient(name);
+            
+            return `
+                <div class="user-review-card animate-fade-in">
+                    <div class="user-review-header">
+                        <div class="user-review-avatar" style="background: ${gradient};">
+                            ${escapeHtml(avatarLetter)}
+                        </div>
+                        <div class="user-review-meta">
+                            <h4>${escapeHtml(name)}</h4>
+                            <span>${escapeHtml(date)}</span>
+                        </div>
+                        <div class="user-review-stars">
+                            ${starsHtml}
+                        </div>
+                    </div>
+                    <p class="user-review-text">"${escapeHtml(text)}"</p>
+                    <div class="user-review-footer">
+                        <i class="fa-solid fa-camera-retro"></i>
+                        <span>${escapeHtml(service)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    if (starPickerStars && stars.length > 0) {
+        stars.forEach(star => {
+            // Hover effect (mouseenter)
+            star.addEventListener('mouseenter', () => {
+                const hoverVal = parseInt(star.getAttribute('data-value'));
+                stars.forEach(s => {
+                    const sVal = parseInt(s.getAttribute('data-value'));
+                    if (sVal <= hoverVal) {
+                        s.classList.add('hovered');
+                    } else {
+                        s.classList.remove('hovered');
+                    }
+                });
+            });
+
+            // Click selection
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                stars.forEach(s => {
+                    const sVal = parseInt(s.getAttribute('data-value'));
+                    if (sVal <= selectedRating) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+                if (starHint) {
+                    starHint.textContent = `تقييمك: ${selectedRating} من 5 ⭐`;
+                    starHint.style.color = '#fbbf24';
+                }
+            });
+        });
+
+        // Reset hover on mouseleave
+        starPickerStars.addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+    }
+
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const reviewNameInput = document.getElementById('reviewName');
+            const reviewServiceSelect = document.getElementById('reviewService');
+            const reviewTextInput = document.getElementById('reviewText');
+            
+            const name = reviewNameInput.value.trim();
+            const service = reviewServiceSelect.value;
+            const text = reviewTextInput.value.trim();
+            
+            // Validation
+            if (!name) {
+                alert('الرجاء إدخال الاسم الكريم.');
+                reviewNameInput.focus();
+                return;
+            }
+            if (selectedRating === 0) {
+                alert('الرجاء تحديد التقييم بالنجوم.');
+                return;
+            }
+            if (!text) {
+                alert('الرجاء كتابة رأيك الكريم.');
+                reviewTextInput.focus();
+                return;
+            }
+            
+            // Success review object
+            const newReview = {
+                id: Date.now(),
+                name: name,
+                service: service || 'تغطية مناسبة 📸',
+                rating: selectedRating,
+                text: text,
+                date: new Date().toLocaleDateString('ar-SA'),
+                avatarLetter: name.charAt(0)
+            };
+            
+            // Save to localStorage
+            const savedReviews = getSavedReviews();
+            savedReviews.unshift(newReview); // Put it at the beginning of user reviews
+            localStorage.setItem('nada_user_reviews', JSON.stringify(savedReviews));
+            
+            // Render reviews
+            renderUserReviews();
+            
+            // Show success message
+            if (reviewSuccess) {
+                reviewSuccess.style.display = 'flex';
+                setTimeout(() => {
+                    reviewSuccess.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Reset form
+            reviewForm.reset();
+            selectedRating = 0;
+            stars.forEach(s => {
+                s.classList.remove('selected');
+                s.classList.remove('hovered');
+            });
+            if (starHint) {
+                starHint.textContent = 'اضغط لاختيار التقييم';
+                starHint.style.color = '';
+            }
+        });
+    }
+
+    // Initial load and render of user reviews
+    renderUserReviews();
+
+    // --- 12. Voice-Controlled Background Calm Audio (Birds & Music) ---
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'ar-SA'; // Listen in Arabic to support 'تشغيل' and 'شغل' properly
+
+        // Birds & flowing water calm audio
+        const ambientAudio = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2016/04/Birds-chirping-and-water-flowing.mp3');
+        ambientAudio.loop = true;
+        ambientAudio.volume = 0.25; // Quiet background level
+
+        // Helper to show floating status tips for voice control
+        function showVoiceTip(message) {
+            let tip = document.getElementById('voice-control-tip');
+            if (!tip) {
+                tip = document.createElement('div');
+                tip.id = 'voice-control-tip';
+                tip.style.position = 'fixed';
+                tip.style.bottom = '30px';
+                tip.style.left = '50%';
+                tip.style.transform = 'translateX(-50%)';
+                tip.style.background = 'rgba(255, 0, 60, 0.95)';
+                tip.style.color = '#fff';
+                tip.style.padding = '12px 26px';
+                tip.style.borderRadius = '30px';
+                tip.style.boxShadow = '0 10px 30px rgba(255, 0, 60, 0.45)';
+                tip.style.zIndex = '9999';
+                tip.style.fontFamily = 'Cairo, sans-serif';
+                tip.style.fontSize = '0.9rem';
+                tip.style.fontWeight = '700';
+                tip.style.textAlign = 'center';
+                tip.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                tip.style.pointerEvents = 'none';
+                document.body.appendChild(tip);
+            }
+            tip.textContent = message;
+            tip.style.opacity = '1';
+            tip.style.transform = 'translateX(-50%) translateY(0)';
+            
+            setTimeout(() => {
+                tip.style.opacity = '0';
+                tip.style.transform = 'translateX(-50%) translateY(20px)';
+            }, 6000);
+        }
+
+        // Event listener for speech recognition results
+        recognition.addEventListener('result', (event) => {
+            const lastResultIndex = event.results.length - 1;
+            const command = event.results[lastResultIndex][0].transcript.trim().toLowerCase();
+            console.log('صوت مستلم:', command);
+
+            const playCommands = ['on', 'شغل', 'تشغيل', 'موسيقى', 'صوت', 'اون', 'أون', 'افتح'];
+            const stopCommands = ['off', 'اطفي', 'أطفي', 'إيقاف', 'ايقاف', 'صمت', 'كتم', 'اوف', 'أوف', 'وقفي', 'سكر'];
+
+            const matchesPlay = playCommands.some(cmd => command.includes(cmd));
+            const matchesStop = stopCommands.some(cmd => command.includes(cmd));
+
+            if (matchesPlay) {
+                ambientAudio.play()
+                    .then(() => {
+                        console.log('تم تشغيل الصوت الهادئ عبر الأمر الصوتي.');
+                        showVoiceTip('🔊 تم تشغيل الموسيقى الهادئة وعصافير الخلفية');
+                    })
+                    .catch(err => console.error('فشل تشغيل الصوت:', err));
+            } else if (matchesStop) {
+                ambientAudio.pause();
+                console.log('تم إيقاف الصوت الهادئ عبر الأمر الصوتي.');
+                showVoiceTip('🔇 تم إيقاف الموسيقى الهادئة');
+            }
+        });
+
+        // Automatically restart listening if it stops
+        recognition.addEventListener('end', () => {
+            try {
+                recognition.start();
+            } catch (err) {
+                // Already running
+            }
+        });
+
+        recognition.addEventListener('error', (event) => {
+            console.error('Speech recognition error:', event.error);
+            if (event.error === 'not-allowed') {
+                showVoiceTip('⚠️ يرجى السماح بصلاحية الميكروفون للتحكم بالصوت');
+            }
+        });
+
+        // Start listening after first click/touch interaction (required by browsers for audio policy)
+        const initVoiceControl = () => {
+            // Play and pause silently to unlock autoplay permission
+            ambientAudio.play().then(() => {
+                ambientAudio.pause();
+                ambientAudio.currentTime = 0;
+            }).catch(err => {
+                console.log('Autoplay unlock silent play failed:', err);
+            });
+
+            try {
+                recognition.start();
+                showVoiceTip('🎤 نظام التحكم الصوتي مفعل! قل "تشغيل" أو "إيقاف" للموسيقى');
+            } catch (err) {
+                // Already running
+            }
+            document.removeEventListener('click', initVoiceControl);
+            document.removeEventListener('touchstart', initVoiceControl);
+        };
+
+        document.addEventListener('click', initVoiceControl);
+        document.addEventListener('touchstart', initVoiceControl);
+    } else {
+        console.warn('Speech recognition is not supported in this browser.');
+    }
 });

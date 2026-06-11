@@ -1913,7 +1913,8 @@ section {
         padding-top: 20px;
     }
 
-    .testimonials-grid {
+    .testimonials-grid,
+    .user-reviews-container {
         grid-template-columns: 1fr;
     }
     
@@ -1956,7 +1957,8 @@ section {
         font-size: 1.6rem;
     }
 
-    .testimonials-grid {
+    .testimonials-grid,
+    .user-reviews-container {
         grid-template-columns: repeat(2, 1fr);
     }
     
@@ -1987,7 +1989,9 @@ section {
 }
 
 @media (max-width: 600px) {
-    .about-stats {
+    .about-stats,
+    .testimonials-grid,
+    .user-reviews-container {
         grid-template-columns: 1fr;
         gap: 15px;
     }
@@ -2021,85 +2025,4 @@ section {
     .logo {
         font-size: 1.5rem;
     }
-}
-
-/* ============================================================
-   User Reviews (Dynamic - from localStorage)
-   ============================================================ */
-.user-reviews-container {
-    margin-top: 3rem;
-}
-
-.user-reviews-heading {
-    font-size: 1.3rem;
-    color: var(--text-white);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.user-reviews-heading i {
-    color: var(--accent-color);
-}
-
-.user-review-card {
-    animation: fadeInUp 0.4s ease forwards;
-    border: 1px solid rgba(255, 0, 60, 0.18);
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Star Picker */
-.star-picker {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1.2rem;
-    flex-wrap: wrap;
-}
-
-.star-picker-label {
-    color: var(--text-gray);
-    font-size: 0.95rem;
-}
-
-.star-picker-stars {
-    display: flex;
-    gap: 6px;
-}
-
-.star-pick {
-    font-size: 1.7rem;
-    color: #374151;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.15s;
-}
-
-.star-pick:hover,
-.star-pick.active {
-    transform: scale(1.2);
-}
-
-.star-picker-hint {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    transition: color 0.2s;
-}
-
-/* Success message */
-.review-success {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-top: 1rem;
-    padding: 0.9rem 1.2rem;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    border-radius: 10px;
-    color: #34d399;
-    font-size: 0.95rem;
 }
