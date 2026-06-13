@@ -675,119 +675,138 @@ ${message}
     // Initial load and render of user reviews
     renderUserReviews();
 
-    // --- 12. Voice-Controlled Background Calm Audio (Birds & Music) ---
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    // --- 12. Hover Sound System (Web Audio API) ---
+    let audioCtx = null;
 
-    if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = false;
-        recognition.lang = 'ar-SA'; // Listen in Arabic to support 'تشغيل' and 'شغل' properly
-
-        // Birds & flowing water calm audio
-        const ambientAudio = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2016/04/Birds-chirping-and-water-flowing.mp3');
-        ambientAudio.loop = true;
-        ambientAudio.volume = 0.25; // Quiet background level
-
-        // Helper to show floating status tips for voice control
-        function showVoiceTip(message) {
-            let tip = document.getElementById('voice-control-tip');
-            if (!tip) {
-                tip = document.createElement('div');
-                tip.id = 'voice-control-tip';
-                tip.style.position = 'fixed';
-                tip.style.bottom = '30px';
-                tip.style.left = '50%';
-                tip.style.transform = 'translateX(-50%)';
-                tip.style.background = 'rgba(255, 0, 60, 0.95)';
-                tip.style.color = '#fff';
-                tip.style.padding = '12px 26px';
-                tip.style.borderRadius = '30px';
-                tip.style.boxShadow = '0 10px 30px rgba(255, 0, 60, 0.45)';
-                tip.style.zIndex = '9999';
-                tip.style.fontFamily = 'Cairo, sans-serif';
-                tip.style.fontSize = '0.9rem';
-                tip.style.fontWeight = '700';
-                tip.style.textAlign = 'center';
-                tip.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                tip.style.pointerEvents = 'none';
-                document.body.appendChild(tip);
-            }
-            tip.textContent = message;
-            tip.style.opacity = '1';
-            tip.style.transform = 'translateX(-50%) translateY(0)';
-            
-            setTimeout(() => {
-                tip.style.opacity = '0';
-                tip.style.transform = 'translateX(-50%) translateY(20px)';
-            }, 6000);
-        }
-
-        // Event listener for speech recognition results
-        recognition.addEventListener('result', (event) => {
-            const lastResultIndex = event.results.length - 1;
-            const command = event.results[lastResultIndex][0].transcript.trim().toLowerCase();
-            console.log('صوت مستلم:', command);
-
-            const playCommands = ['on', 'شغل', 'تشغيل', 'موسيقى', 'صوت', 'اون', 'أون', 'افتح'];
-            const stopCommands = ['off', 'اطفي', 'أطفي', 'إيقاف', 'ايقاف', 'صمت', 'كتم', 'اوف', 'أوف', 'وقفي', 'سكر'];
-
-            const matchesPlay = playCommands.some(cmd => command.includes(cmd));
-            const matchesStop = stopCommands.some(cmd => command.includes(cmd));
-
-            if (matchesPlay) {
-                ambientAudio.play()
-                    .then(() => {
-                        console.log('تم تشغيل الصوت الهادئ عبر الأمر الصوتي.');
-                        showVoiceTip('🔊 تم تشغيل الموسيقى الهادئة وعصافير الخلفية');
-                    })
-                    .catch(err => console.error('فشل تشغيل الصوت:', err));
-            } else if (matchesStop) {
-                ambientAudio.pause();
-                console.log('تم إيقاف الصوت الهادئ عبر الأمر الصوتي.');
-                showVoiceTip('🔇 تم إيقاف الموسيقى الهادئة');
-            }
-        });
-
-        // Automatically restart listening if it stops
-        recognition.addEventListener('end', () => {
-            try {
-                recognition.start();
-            } catch (err) {
-                // Already running
-            }
-        });
-
-        recognition.addEventListener('error', (event) => {
-            console.error('Speech recognition error:', event.error);
-            if (event.error === 'not-allowed') {
-                showVoiceTip('⚠️ يرجى السماح بصلاحية الميكروفون للتحكم بالصوت');
-            }
-        });
-
-        // Start listening after first click/touch interaction (required by browsers for audio policy)
-        const initVoiceControl = () => {
-            // Play and pause silently to unlock autoplay permission
-            ambientAudio.play().then(() => {
-                ambientAudio.pause();
-                ambientAudio.currentTime = 0;
-            }).catch(err => {
-                console.log('Autoplay unlock silent play failed:', err);
-            });
-
-            try {
-                recognition.start();
-                showVoiceTip('🎤 نظام التحكم الصوتي مفعل! قل "تشغيل" أو "إيقاف" للموسيقى');
-            } catch (err) {
-                // Already running
-            }
-            document.removeEventListener('click', initVoiceControl);
-            document.removeEventListener('touchstart', initVoiceControl);
-        };
-
-        document.addEventListener('click', initVoiceControl);
-        document.addEventListener('touchstart', initVoiceControl);
-    } else {
-        console.warn('Speech recognition is not supported in this browser.');
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
     }
+
+    function playHoverSound(freq = 520, vol = 0.07, type = 'sine', duration = 0.12) {
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(freq * 0.82, ctx.currentTime + duration);
+            gain.gain.setValueAtTime(vol, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + duration);
+        } catch (e) {}
+    }
+
+    // Camera shutter sound (click + mechanical feel)
+    function playCameraShutter() {
+        try {
+            const ctx = getAudioCtx();
+            const now = ctx.currentTime;
+
+            // Click transient
+            const bufSize = ctx.sampleRate * 0.08;
+            const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 6);
+            }
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+
+            const clickGain = ctx.createGain();
+            clickGain.gain.setValueAtTime(0.32, now);
+            clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+
+            // Low thud
+            const osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(90, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.06);
+            const thudGain = ctx.createGain();
+            thudGain.gain.setValueAtTime(0.22, now);
+            thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+
+            noise.connect(clickGain);
+            clickGain.connect(ctx.destination);
+            osc.connect(thudGain);
+            thudGain.connect(ctx.destination);
+
+            noise.start(now);
+            osc.start(now);
+            osc.stop(now + 0.08);
+
+            // Flash overlay effect
+            const flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:99999;transition:opacity 0.05s ease;';
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.18';
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    setTimeout(() => flash.remove(), 200);
+                }, 60);
+            });
+        } catch (e) {}
+    }
+
+    // Attach hover sounds
+    function attachHoverSounds() {
+        // Nav & footer links
+        document.querySelectorAll('.nav-link, .mobile-link, .footer-links a').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(700, 0.055, 'sine', 0.1));
+        });
+        // Social icons
+        document.querySelectorAll('.social-icon').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(580, 0.07, 'sine', 0.13));
+        });
+        // Buttons
+        document.querySelectorAll('.btn, .filter-btn, .hamburger-btn').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(620, 0.06, 'sine', 0.11));
+            el.addEventListener('click',      () => playHoverSound(760, 0.09, 'sine', 0.09));
+        });
+        // Service & gallery cards
+        document.querySelectorAll('.service-card, .gallery-item, .testimonial-card').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(480, 0.045, 'sine', 0.14));
+        });
+        // Star rating
+        document.querySelectorAll('.star-pick').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(660, 0.06, 'triangle', 0.1));
+            el.addEventListener('click',      () => playHoverSound(800, 0.09, 'triangle', 0.12));
+        });
+        // Info items
+        document.querySelectorAll('.info-item, .about-stat').forEach(el => {
+            el.addEventListener('mouseenter', () => playHoverSound(540, 0.04, 'sine', 0.1));
+        });
+
+        // === CAMERA SHUTTER on hero avatar hover ===
+        const heroImg = document.querySelector('.hero-img, .hero-image-wrapper img, .glow-ring ~ * img');
+        const heroWrapper = document.querySelector('.hero-image-wrapper');
+        const target = heroWrapper || heroImg;
+        if (target) {
+            target.addEventListener('mouseenter', () => {
+                playCameraShutter();
+                target.style.transition = 'transform 0.15s ease, filter 0.15s ease';
+                target.style.filter = 'brightness(1.15) saturate(1.2)';
+                target.style.transform = 'scale(1.04)';
+                setTimeout(() => {
+                    target.style.filter = '';
+                    target.style.transform = '';
+                }, 350);
+            });
+        }
+    }
+
+    // Unlock AudioContext on first interaction
+    const unlockAudio = () => {
+        getAudioCtx();
+        attachHoverSounds();
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+    };
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
+
 });

@@ -170,7 +170,7 @@ section {
 .btn-primary:hover {
     background: transparent;
     color: var(--accent-color);
-    box-shadow: 0 0 30px rgba(255, 0, 60, 0.85), 0 0 15px rgba(255, 0, 60, 0.45);
+    box-shadow: 0 0 25px var(--accent-glow);
     transform: translateY(-3px);
 }
 
@@ -183,7 +183,7 @@ section {
 .btn-outline:hover {
     border-color: var(--accent-color);
     color: var(--accent-color);
-    box-shadow: 0 0 25px rgba(255, 0, 60, 0.75), 0 0 10px rgba(255, 0, 60, 0.35);
+    box-shadow: 0 0 20px var(--accent-glow-subtle);
     transform: translateY(-3px);
 }
 
@@ -348,7 +348,6 @@ section {
 
 .nav-link:hover, .nav-link.active {
     color: var(--text-white);
-    text-shadow: 0 0 15px rgba(255, 0, 60, 0.9), 0 0 8px rgba(255, 0, 60, 0.5);
 }
 
 .nav-link::after {
@@ -435,7 +434,7 @@ section {
 
 .mobile-link:hover, .mobile-link.active {
     color: var(--text-white);
-    text-shadow: 0 0 20px rgba(255, 0, 60, 0.95), 0 0 10px rgba(255, 0, 60, 0.5);
+    text-shadow: 0 0 10px var(--accent-glow);
 }
 
 /* Hero Section (Image on Right, Text on Left in RTL) */
@@ -557,7 +556,7 @@ section {
     color: var(--text-white);
     background-color: var(--accent-color);
     border-color: var(--accent-color);
-    box-shadow: 0 0 25px rgba(255, 0, 60, 0.9), 0 0 12px rgba(255, 0, 60, 0.5);
+    box-shadow: 0 0 15px var(--accent-glow);
     transform: translateY(-5px);
 }
 
@@ -2027,3 +2026,120 @@ section {
         font-size: 1.5rem;
     }
 }
+
+/* ============================================================
+   Review Edit / Delete Action Buttons
+   ============================================================ */
+.user-review-card {
+    position: relative;
+}
+
+.review-action-btns {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 5;
+}
+
+.user-review-card:hover .review-action-btns {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.review-edit-btn,
+.review-delete-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-edit-btn {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+}
+
+.review-delete-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
+}
+
+.review-edit-btn:hover  { transform: scale(1.18); box-shadow: 0 6px 20px rgba(245,158,11,0.65); }
+.review-delete-btn:hover { transform: scale(1.18); box-shadow: 0 6px 20px rgba(239,68,68,0.65); }
+
+/* ============================================================
+   Enhanced Glow — Nav Links, Social Icons, Buttons, Cards
+   ============================================================ */
+
+/* Nav links stronger underline glow */
+.nav-link::after {
+    box-shadow: 0 0 12px var(--accent-color), 0 0 24px rgba(255,0,60,0.5) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    text-shadow: 0 0 14px rgba(255, 0, 60, 0.75), 0 0 28px rgba(255, 0, 60, 0.35) !important;
+}
+
+/* Social icons pulsing glow on hover */
+.social-icon:hover {
+    box-shadow: 0 0 0 3px rgba(255,0,60,0.25),
+                0 0 22px rgba(255,0,60,0.6),
+                0 0 40px rgba(255,0,60,0.3) !important;
+    text-shadow: 0 0 12px #fff;
+}
+
+/* Primary buttons — deeper glow */
+.btn-primary:hover {
+    box-shadow: 0 8px 30px rgba(255,0,60,0.55),
+                0 0 60px rgba(255,0,60,0.25) !important;
+}
+
+/* Service cards */
+.service-card:hover {
+    box-shadow: 0 20px 60px rgba(255,0,60,0.22),
+                0 0 0 1px rgba(255,0,60,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+/* Gallery items */
+.gallery-item:hover {
+    box-shadow: 0 20px 50px rgba(255,0,60,0.30),
+                0 0 35px rgba(255,0,60,0.18) !important;
+}
+
+/* Testimonial cards */
+.testimonial-card:hover {
+    box-shadow: 0 16px 50px rgba(255,0,60,0.20),
+                0 0 30px rgba(255,0,60,0.12) !important;
+    border-color: rgba(255,0,60,0.35) !important;
+}
+
+/* Hero avatar glow ring — more intense */
+.glow-ring {
+    box-shadow:
+        0 0 60px rgba(255, 0, 60, 0.55),
+        0 0 120px rgba(255, 0, 60, 0.30),
+        0 0 200px rgba(255, 0, 60, 0.15) !important;
+}
+
+/* Mouse ambient glow — larger radius */
+.mouse-glow {
+    width: 420px !important;
+    height: 420px !important;
+    background: radial-gradient(circle, rgba(255,0,60,0.10) 0%, transparent 70%) !important;
+}
+
